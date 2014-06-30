@@ -10,26 +10,25 @@ Instalation
 ===========
 Download or checkout this repo into the library directoy of your arduinos sketchbook (ie ~/sketchbook/library/CharlieCube/CharlieCube.h)
 
-  cd ~/sketchbook
-  mkdir -p library
-  cd library
-  git clone https://github.com/james147/CharlieCube.git
-  
-  
+    cd ~/sketchbook
+    mkdir -p library
+    cd library
+    git clone https://github.com/james147/CharlieCube.git
+
 Now you can open (or restart) your arduino ide and browse the examples via File->Examples->CharlieCube.
 
 Usage
 =====
 
-  Cube::begin();
+    Cube::begin();
   
 Sets up the cube, shoule only be called once in the setup function.
 
-  Cube::clear();
+    Cube::clear();
   
 Turns off all of the leds.
 
-  Cube::drawPoint(uint8_t x, uint8_t y, uint8_t z, uint8_t red, uint8_t green, uint8_t blue);
+    Cube::drawPoint(uint8_t x, uint8_t y, uint8_t z, uint8_t red, uint8_t green, uint8_t blue);
   
 Turns on/off the red, green and/or blue led at x, y, x
 
