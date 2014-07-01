@@ -23,6 +23,7 @@ struct LED {
   uint8_t blue;
 };
 
+ISR(TIMER2_OVF_vect);
 
 class Cube {
 public:
@@ -38,7 +39,7 @@ private:
   static LED leds[cube_size][cube_size][cube_size];
 
   Cube();
-  friend void TIMER1_COMPA_vect(void);
+  friend void TIMER2_OVF_vect();
 };
 
 #endif

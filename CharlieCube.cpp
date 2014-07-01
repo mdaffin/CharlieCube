@@ -37,10 +37,9 @@ void Cube::clear() {
   }
 }
 
-/*
 ISR(TIMER2_OVF_vect) 
 {
-  //LEDPin* pins = (LEDPin *)led_maps + Cube::current_led;
+  LEDPin* pins = (LEDPin *)led_maps + Cube::current_led;
 
   PORTB = 0x00;
   PORTC = 0x00;
@@ -56,6 +55,5 @@ ISR(TIMER2_OVF_vect)
     PORTD = pinsD[pins->vcc]; 
   }
   
-  //current_led = (current_led + 1) % (cube_size * cube_size * cube_size * 3);
+  Cube::current_led = (Cube::current_led + 1) % (cube_size * cube_size * cube_size * 3);
 }
-*/
