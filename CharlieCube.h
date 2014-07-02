@@ -41,12 +41,16 @@ public:
       uint8_t red, uint8_t green, uint8_t blue
   );
   static void clear();
+  static void flush();
 
 private:
   static int current_led;
-  static LED leds[cube_size][cube_size][cube_size];
+  static LED draw_frame[cube_size][cube_size][cube_size];
+  static LED render_frame[cube_size][cube_size][cube_size];
+  static bool frame_ready;
 
   Cube();
+  static void swapBuffers();
   friend void TIMER2_OVF_vect();
 };
 
