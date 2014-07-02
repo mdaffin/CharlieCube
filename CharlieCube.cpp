@@ -9,6 +9,12 @@ const uint8_t pinsD[] = {0x04,0x08,0x10,0x20,0x40,0x80,0x00,0x00,0x00,0x00,0x00,
 
 extern LEDMap led_maps[];
 
+void swap(uint8_t &a, uint8_t &b) {
+  uint8_t c = a;
+  a = b;
+  b = c;
+}
+
 void Cube::begin()
 {
   /* Setup timer 2 */
@@ -19,10 +25,27 @@ void Cube::begin()
   TCCR2B &= ~(1<<WGM22);
 }
 
-void Cube::drawPoint(uint8_t x, uint8_t y, uint8_t z, uint8_t red, uint8_t green, uint8_t blue) {
+void Cube::drawPoint(uint8_t x, uint8_t y, uint8_t z,
+                     uint8_t red, uint8_t green, uint8_t blue) {
   leds[x][y][z].red = red;
   leds[x][y][z].green = green;
   leds[x][y][z].blue = blue;
+}
+
+void Cube::drawBox(uint8_t from_x, uint8_t from_y, uint8_t from_z, 
+                   uint8_t to_x, uint8_t to_y, uint8_t to_z, 
+                   uint8_t red, uint8_t green, uint8_t blue) {
+  if (from_x >  to_x) { swap(from_x, to_x); }  
+  if (from_y >  to_y) { swap(from_y, to_y); }  
+  if (from_z >  to_z) { swap(from_z, to_z); }  
+
+  for (int i = from_x; i <= to_x; i++) {
+    for (int j = from_y; j <= to_y; j++) {
+      for (int k = from_z; k <= to_z; k++) {
+        drawPoint(i, j, k, red, green, blue);
+      }
+    }
+  }
 }
 
 void Cube::clear() {

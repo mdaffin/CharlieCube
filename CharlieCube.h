@@ -31,7 +31,15 @@ public:
    * Initiate the tone player.
    */
   static void begin();
-  static void drawPoint(uint8_t x, uint8_t y, uint8_t z, uint8_t red, uint8_t green, uint8_t blue);
+  static void drawPoint(
+      uint8_t x, uint8_t y, uint8_t z, 
+      uint8_t red, uint8_t green, uint8_t blue
+  );
+  static void drawBox(
+      uint8_t from_x, uint8_t from_y, uint8_t from_z, 
+      uint8_t to_x, uint8_t to_y, uint8_t to_z, 
+      uint8_t red, uint8_t green, uint8_t blue
+  );
   static void clear();
 
 private:
