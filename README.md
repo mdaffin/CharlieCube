@@ -30,6 +30,10 @@ Turns off all of the leds.
 
     Cube::drawPoint(uint8_t x, uint8_t y, uint8_t z, uint8_t red, uint8_t green, uint8_t blue);
   
-Turns on/off the red, green and/or blue led at x, y, x
+Turns on/off the red, green and/or blue led at x, y, x.
 
+  Cube::drawBox( uint8_t from_x, uint8_t from_y, uint8_t from_z, uint8_t to_x, uint8_t to_y, uint8_t to_z, uint8_t red, uint8_t green, uint8_t blue
+  );
+
+Draws a solid cube between the two points in the given color.
 
