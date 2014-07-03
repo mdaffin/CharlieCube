@@ -47,10 +47,8 @@ private:
   static int current_led;
   static LED draw_frame[cube_size][cube_size][cube_size];
   static LED render_frame[cube_size][cube_size][cube_size];
-  static bool frame_ready;
 
   Cube();
-  static void swapBuffers();
   friend void TIMER2_OVF_vect();
 };
 

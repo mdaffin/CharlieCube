@@ -1,10 +1,11 @@
 #include "CharlieCube.h"
 #include <string.h>
+#include <Arduino.h>
 
 LED Cube::draw_frame[cube_size][cube_size][cube_size] = {};
 LED Cube::render_frame[cube_size][cube_size][cube_size] = {};
 int Cube::current_led = 0;
-bool Cube::frame_ready = false;
+uint8_t pass = 0;
 
 const uint8_t pinsB[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x00,0x00,0x00,0x00};
 const uint8_t pinsC[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x02,0x04,0x08};
@@ -64,18 +65,16 @@ void Cube::clear() {
 }
 
 void Cube::flush() {
-  frame_ready = true;
-  while(frame_ready) {}
-}
-
-void Cube::swapBuffers() {
-  cli();
   memcpy(render_frame, draw_frame, sizeof(draw_frame));
-  sei();
 }
 
 ISR(TIMER2_OVF_vect) 
 {
+  // Drawing every update slows down animations, and a higher prescaller causes flicker
+  if ((++pass) % 2) {
+    return;
+  }
+
   LEDPin* pins = (LEDPin *)led_maps + Cube::current_led;
 
   PORTB = 0x00;
@@ -93,8 +92,4 @@ ISR(TIMER2_OVF_vect)
   }
   
   Cube::current_led = (Cube::current_led + 1) % (cube_size * cube_size * cube_size * 3);
-  if (Cube::current_led == 0 && Cube::frame_ready) {
-    Cube::frame_ready = false;
-    Cube::swapBuffers();
-  }
 }
