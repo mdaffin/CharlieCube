@@ -2,11 +2,11 @@
 
 void setup() {
   Cube::begin();
-  fountian(255, 0, 0);
+  fountian(8, 0, 0);
   fountian(0, 0, 0);
-  fountian(0, 255, 0);
+  fountian(0, 8, 0);
   fountian(0, 0, 0);
-  fountian(0, 0, 255);
+  fountian(0, 0, 8);
   fountian(0, 0, 0);
 }
 
@@ -29,13 +29,13 @@ void fountian(uint8_t red, uint8_t green, uint8_t blue) {
 }
 
 void loop() {
-  uint8_t red = random(2);
-  uint8_t green = random(2);
-  uint8_t blue = random(2);
+  uint8_t red = random(9);
+  uint8_t green = random(9);
+  uint8_t blue = random(9);
   while (!(red+green+blue)) {
-    red = random(2);
-    green = random(2);
-    blue = random(2);
+    red = random(9);
+    green = random(9);
+    blue = random(9);
   }
   fountian(red, green, blue);
   fountian(0, 0, 0);

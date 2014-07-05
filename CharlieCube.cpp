@@ -6,12 +6,24 @@ LED Cube::draw_frame[cube_size][cube_size][cube_size] = {};
 LED Cube::render_frame[cube_size][cube_size][cube_size] = {};
 int Cube::current_led = 0;
 uint8_t pass = 0;
+uint8_t sweep = 0;
+const LEDPin *Cube::pins = ((LEDPin*)&Cube::led_maps);
+
+uint8_t pwm_map[] = {
+  0b00000000,
+  0b10000000,
+  0b10001000,
+  0b10010010,
+  0b10101010,
+  0b10110110,
+  0b11101110,
+  0b11111110,
+  0b11111111
+};
 
 const uint8_t pinsB[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x00,0x00,0x00,0x00};
 const uint8_t pinsC[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x02,0x04,0x08};
 const uint8_t pinsD[] = {0x04,0x08,0x10,0x20,0x40,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-
-extern LEDMap led_maps[];
 
 void swap(uint8_t &a, uint8_t &b) {
   uint8_t c = a;
@@ -71,25 +83,29 @@ void Cube::flush() {
 ISR(TIMER2_OVF_vect) 
 {
   // Drawing every update slows down animations, and a higher prescaller causes flicker
-  if ((++pass) % 2) {
+  if ((pass) % 2) {
     return;
   }
 
-  LEDPin* pins = (LEDPin *)led_maps + Cube::current_led;
+  uint8_t brightness = pwm_map[((uint8_t*)Cube::render_frame)[Cube::current_led]];
 
-  PORTB = 0x00;
-  PORTC = 0x00;
-  PORTD = 0x00;
+  if (brightness & (1 << sweep)) {
+    const LEDPin *pin = &Cube::pins[Cube::current_led];
+    DDRB = pinsB[pin->vcc] | pinsB[pin->vss];
+    DDRC = pinsC[pin->vcc] | pinsC[pin->vss];
+    DDRD = pinsD[pin->vcc] | pinsD[pin->vss];
 
-  if (((bool*)Cube::render_frame)[Cube::current_led]) {
-    DDRB = pinsB[pins->vcc] | pinsB[pins->vss];
-    DDRC = pinsC[pins->vcc] | pinsC[pins->vss];
-    DDRD = pinsD[pins->vcc] | pinsD[pins->vss];
-
-    PORTB = pinsB[pins->vcc];
-    PORTC = pinsC[pins->vcc];
-    PORTD = pinsD[pins->vcc]; 
+    PORTB = pinsB[pin->vcc];
+    PORTC = pinsC[pin->vcc];
+    PORTD = pinsD[pin->vcc]; 
+  } else {
+    PORTB = 0x00;
+    PORTC = 0x00;
+    PORTD = 0x00;
   }
   
-  Cube::current_led = (Cube::current_led + 1) % (cube_size * cube_size * cube_size * 3);
+  if (++Cube::current_led >= 192) {
+    Cube::current_led = 0;
+    ++sweep %= 8;
+  }
 }

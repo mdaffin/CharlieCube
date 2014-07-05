@@ -47,7 +47,9 @@ private:
   static int current_led;
   static LED draw_frame[cube_size][cube_size][cube_size];
   static LED render_frame[cube_size][cube_size][cube_size];
-
+  static const uint16_t number_leds = cube_size * cube_size * cube_size * 3;
+  static const LEDMap led_maps[];
+  static const LEDPin *pins;
   Cube();
   friend void TIMER2_OVF_vect();
 };

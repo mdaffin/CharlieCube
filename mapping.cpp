@@ -2,7 +2,7 @@
 #include <avr/io.h> 
 #include <avr/pgmspace.h>
 
-LEDMap __attribute__((week)) led_maps[] = {
+const LEDMap Cube::led_maps[] = {
   //Red,      Green,    Blue         xyz
   {{12,  8}, { 0,  8}, { 7,  8}}, // 000
   {{ 8,  7}, {12,  7}, { 0,  7}}, // 001
