@@ -124,6 +124,10 @@ void Cube::flush() {
 ISR(TIMER2_OVF_vect) 
 {
   uint8_t brightness = pgm_read_byte(&(Cube::pwm_map[((uint8_t*)Cube::render_frame)[Cube::current_led]]));
+  // Must be explictly reset or random leds light up when they should not
+  PORTB = 0x00;
+  PORTC = 0x00;
+  PORTD = 0x00;
 
   if (brightness & (1 << Cube::sweep)) {
     const uint8_t vcc = pgm_read_byte(&(((LEDPin*)Cube::led_maps)[Cube::current_led].vcc));
@@ -135,10 +139,6 @@ ISR(TIMER2_OVF_vect)
     PORTB = pgm_read_byte(&(Cube::pinsB[vcc]));
     PORTC = pgm_read_byte(&(Cube::pinsC[vcc]));
     PORTD = pgm_read_byte(&(Cube::pinsD[vcc])); 
-  } else {
-    PORTB = 0x00;
-    PORTC = 0x00;
-    PORTD = 0x00;
   }
   
   if (++Cube::current_led >= 192) {
