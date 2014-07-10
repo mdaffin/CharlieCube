@@ -40,6 +40,11 @@ public:
       uint8_t to_x, uint8_t to_y, uint8_t to_z, 
       uint8_t red, uint8_t green, uint8_t blue
   );
+  static void drawLine(
+      uint8_t from_x, uint8_t from_y, uint8_t from_z, 
+      uint8_t to_x, uint8_t to_y, uint8_t to_z,
+      uint8_t red, uint8_t green, uint8_t blue);
+  static int roundClostest(int numerator, int denominator);
   static void clear();
   static void flush();
 

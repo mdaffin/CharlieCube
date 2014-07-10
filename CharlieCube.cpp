@@ -62,6 +62,49 @@ void Cube::drawBox(uint8_t from_x, uint8_t from_y, uint8_t from_z,
   }
 }
 
+void Cube::drawLine(uint8_t from_x, uint8_t from_y, uint8_t from_z, 
+              uint8_t to_x, uint8_t to_y, uint8_t to_z,
+              uint8_t red, uint8_t green, uint8_t blue) {
+  bool reverseX = false;
+  bool reverseY = false;
+  bool reverseZ = false;
+  if (from_x > to_x) {swap(from_x,to_x);reverseX=true;}
+  if (from_y > to_y) {swap(from_y,to_y);reverseY=true;}
+  if (from_z > to_z) {swap(from_z,to_z);reverseZ=true;}
+
+  int delx = to_x - from_x;
+  int dely = to_y - from_y;
+  int delz = to_z - from_z;
+  
+  int longest = (delx>dely?delx>delz?delx:delz>dely?delz:dely:dely>delz?dely:delz>delx?delz:delx);
+  for (int i = 0; i < longest; i++) {
+    int xpos;
+    if (reverseX) xpos = roundClostest(((longest-i)*delx),longest) + from_x;
+    else xpos = roundClostest((i*delx),longest) + from_x;
+    
+    int ypos;
+    if (reverseY) ypos = roundClostest(((longest-i)*dely),longest) + from_y;
+    else ypos = roundClostest((i*dely),longest) + from_y;
+    
+    int zpos;
+    if (reverseZ) zpos = roundClostest(((longest-i)*delz),longest) + from_z;
+    else zpos = roundClostest((i*delz),longest) + from_z;
+    
+    drawPoint(xpos,ypos,zpos, red, green, blue);
+  }
+  
+  if (reverseX) swap(from_x,to_x);
+  if (reverseY) swap(from_y,to_y);
+  if (reverseZ) swap(from_z,to_z);
+  drawPoint(to_x,to_y,to_z, red, green, blue);
+}
+
+int Cube::roundClostest(int numerator, int denominator) {
+  numerator = (numerator << 1)/denominator;
+  int output = (numerator>>1) + (numerator % 2);
+  return output;
+}
+
 void Cube::clear() {
   for (int z = 0; z < 4; z++) {
     for (int y = 0; y < 4; y++) {
